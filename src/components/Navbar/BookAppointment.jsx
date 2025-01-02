@@ -107,6 +107,7 @@ const BookAppointment = () => {
             </select>
           </div>
 
+
           {/* Date and Time */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
@@ -172,23 +173,6 @@ const BookAppointment = () => {
               value={appointmentReason}
               onChange={(e) => setAppointmentReason(e.target.value)}
             />
-          </div>
-
-          {/* Video Consultation Toggle */}
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="videoConsultation"
-              className="mr-2"
-              checked={isVideoConsultation}
-              onChange={() => {
-                setIsVideoConsultation(!isVideoConsultation);
-                generateVideoLink(); // Update video link when the toggle changes
-              }}
-            />
-            <label htmlFor="videoConsultation" className="text-sm text-gray-700">
-              Request Video Consultation
-            </label>
           </div>
 
           {/* Video Consultation Details (if video consultation is selected) */}
