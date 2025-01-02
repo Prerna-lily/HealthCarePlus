@@ -27,3 +27,13 @@ CREATE TABLE appointments1 (
   appointment_reason TEXT,
   payment BOOLEAN DEFAULT FALSE
 );
+
+**To start Backend:**
+
+server.js
+
+node server.js
+
+**To start frontend:**
+
+npm run dev
