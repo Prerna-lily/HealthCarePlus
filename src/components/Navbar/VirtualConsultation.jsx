@@ -45,8 +45,13 @@ const VirtualConsultation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.payment) {
+      setError("Please select a payment method.");
+      return;
+    }
+  
     const formData = { ...form };
-
+  
     try {
       await axios.post(
         "http://localhost:5000/schedule-video-consultation",
@@ -59,12 +64,12 @@ const VirtualConsultation = () => {
       setError("Error booking consultation, please try again.");
     }
   };
+  
 
   const handlePayment = (method) => {
-    // Simulate payment success
-    alert(`Payment method selected: ${method}`);
-    setPaymentSuccess(true); // Set payment success to true
-  };
+    setForm({ ...form, payment: method }); // Add payment method to the form
+    setPaymentSuccess(true);
+  };  
 
   const handleDoctorSelection = (doctor) => {
     setForm({ ...form, doctor });
@@ -168,6 +173,13 @@ const VirtualConsultation = () => {
             Book Consultation
           </button>
         </form>
+        <div>
+
+  <h3>Select Payment Method</h3>
+  <button onClick={() => handlePayment("Credit Card")}>Credit Card</button>
+  <button onClick={() => handlePayment("PayPal")}>PayPal</button>
+</div>
+
 
         {successMessage && !paymentSuccess && (
           <div className="payment-container">
