@@ -11,9 +11,9 @@ import BookAppointment from './components/Navbar/BookAppointment.jsx';
 import BlogDetails from './components/Blogs/BlogDetails.jsx'; // Import BlogDetails component
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import TextToGerman from './pages/TextToGerman.jsx';
 import Chatbot from './components/Chatbot.jsx'; // Import Chatbot component
 import Authentication from './components/Authentication.jsx'; // Import Authentication component
+import VirtualConsultation from './components/Navbar/VirtualConsultation.jsx';
 
 export const App = () => {
   useEffect(() => {
@@ -43,6 +43,10 @@ export const App = () => {
       element: <Blog />,
     },
     {
+      path: '/virtual-consultation',
+      element: <VirtualConsultation />, // Add this route
+    },
+    {
       path: '/all-services',
       element: <AllServices />,
     },
@@ -57,10 +61,6 @@ export const App = () => {
     {
       path: '/book-appointment',
       element: <BookAppointment />,
-    },
-    {
-      path: '/translate',
-      element: <TextToGerman />,
     },
     {
       path: '/blog-details', // New route for BlogDetails
