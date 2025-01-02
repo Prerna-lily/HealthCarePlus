@@ -53,27 +53,31 @@ const BlogsData = [
   },
 ];
 
-// Partner data
+// Partner data with URLs
 const PartnersData = [
   {
     id: 1,
     name: "Artemis Hospital",
     logo: "src/assets/brands/im7.png", // Replace with actual logo URL
+    website: "https://www.artemishospitals.com" // Artemis Hospital website
   },
   {
     id: 2,
     name: "Apollo Hospital",
     logo: "src/assets/brands/im6.png", // Replace with actual logo URL
+    website: "https://www.apollohospitals.com" // Apollo Hospital website
   },
   {
     id: 3,
     name: "Hospital Aleman",
     logo: "src/assets/brands/im8.png", // Replace with actual logo URL
+    website: "https://www.hospitalaleman.com.ar" // Hospital Aleman website
   },
   {
     id: 4,
     name: "Hospital Metropolitano",
     logo: "src/assets/brands/im9.png", // Replace with actual logo URL
+    website: "https://www.hospitalmetropolitano.com" // Hospital Metropolitano website
   },
 ];
 
@@ -123,29 +127,32 @@ const BlogsComp = () => {
       </section>
 
       {/* Our Partners Section */}
-      {/* Our Partners Section */}
-<section data-aos="fade-up" className="container mt-10">
-  <h1 className="my-8 border-l-8 border-primary/50 py-2 pl-2 text-3xl font-semibold">
-    Our Partners
-  </h1>
-  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    {PartnersData.map((partner) => (
-      <div
-        key={partner.id}
-        className="partner-card p-4 bg-white rounded-md shadow-md flex flex-col items-center justify-center"
-      >
-        <img
-          src={partner.logo}
-          alt={partner.name}
-          className="h-20 object-contain"
-        />
-        <h2 className="text-lg font-semibold mt-4 text-center">
-          {partner.name}
-        </h2>
-      </div>
-    ))}
-  </div>
-</section>
+      <section data-aos="fade-up" className="container mt-10">
+        <h1 className="my-8 border-l-8 border-primary/50 py-2 pl-2 text-3xl font-semibold">
+          Our Partners
+        </h1>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {PartnersData.map((partner) => (
+            <div
+              key={partner.id}
+              className="partner-card p-4 bg-white rounded-md shadow-md flex flex-col items-center justify-center"
+            >
+              <a href={partner.website} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="h-20 object-contain"
+                />
+              </a>
+              <h2 className="text-lg font-semibold mt-4 text-center">
+                <a href={partner.website} target="_blank" rel="noopener noreferrer">
+                  {partner.name}
+                </a>
+              </h2>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };
