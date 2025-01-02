@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const doctors = [
   {
@@ -69,7 +70,7 @@ const doctors = [
   },
   {
     id: 6,
-    image: "https://t4.ftcdn.net/jpg/03/21/23/37/360_F_321233723_3nSdORPnL4nPOfGEocyCGVCI0RoXuRVo.jpg", // Add image link for the new doctor
+    image: "https://t4.ftcdn.net/jpg/03/21/23/37/360_F_321233723_3nSdORPnL4nPOfGEocyCGVCI0RoXuRVo.jpg",
     name: "Dr. Mark Wilson",
     specialty: "Pediatrician",
     phoneNumber: "+1987654321",
@@ -82,7 +83,7 @@ const doctors = [
   },
   {
     id: 7,
-    image: "https://www.shutterstock.com/image-photo/beautiful-african-american-nurse-arms-600nw-1936087690.jpg", // Add image link for the new doctor
+    image: "https://www.shutterstock.com/image-photo/beautiful-african-american-nurse-arms-600nw-1936087690.jpg",
     name: "Dr. Emma Robinson",
     specialty: "Psychiatrist",
     phoneNumber: "+1209876543",
@@ -97,9 +98,18 @@ const doctors = [
 
 const FindDoctor = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const navigate = useNavigate();
 
   const handleDoctorClick = (doctor) => {
     setSelectedDoctor(doctor);
+  };
+
+  const handleBackClick = () => {
+    setSelectedDoctor(null);
+  };
+
+  const handleMainBackClick = () => {
+    navigate(-1); // Navigates to the previous page
   };
 
   return (
@@ -108,35 +118,23 @@ const FindDoctor = () => {
         <h1 className="text-3xl font-semibold text-center mb-8">Find a Doctor</h1>
         <p className="text-center mb-8">Scroll through to find the right specialist for you.</p>
 
-        {/* Horizontal Scrollable Doctors */}
-        <div className="doctor-list flex overflow-x-auto space-x-4 scrollbar-hide">
-          {doctors.map((doctor) => (
-            <motion.div
-              key={doctor.id}
-              className="doctor-card flex-shrink-0 w-64 bg-white shadow-lg rounded-lg p-4"
-              whileInView={{ opacity: 1, scale: 1 }}
-              initial={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.5 }}
-              onClick={() => handleDoctorClick(doctor)}
-            >
-              <img
-                src={doctor.image}
-                alt={doctor.name}
-                className="w-full h-40 object-cover rounded-lg mb-4"
-              />
-              <h3 className="text-xl font-semibold text-center">{doctor.name}</h3>
-              <p className="text-center text-blue-500">{doctor.specialty}</p>
-              <p className="text-sm mt-2">
-                <strong>Phone:</strong> {doctor.phoneNumber} <br />
-                <strong>Email:</strong> {doctor.email}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+        {!selectedDoctor && (
+          <button
+            onClick={handleMainBackClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4 hover:bg-blue-600"
+          >
+            Back
+          </button>
+        )}
 
-        {/* Display selected doctor's details */}
-        {selectedDoctor && (
-          <div className="doctor-details mt-8 bg-white p-6 rounded-lg shadow-lg">
+        {selectedDoctor ? (
+          <div className="doctor-details bg-white p-6 rounded-lg shadow-lg">
+            <button
+              onClick={handleBackClick}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4 hover:bg-blue-600"
+            >
+              Back
+            </button>
             <h2 className="text-2xl font-semibold mb-4">{selectedDoctor.name}</h2>
             <p><strong>Specialty:</strong> {selectedDoctor.specialty}</p>
             <p><strong>Expertise:</strong> {selectedDoctor.expertise}</p>
@@ -144,6 +142,31 @@ const FindDoctor = () => {
             <p><strong>Recognition:</strong> {selectedDoctor.recognition}</p>
             <p><strong>Specialization:</strong> {selectedDoctor.specialization}</p>
             <p><strong>Membership:</strong> {selectedDoctor.membership}</p>
+          </div>
+        ) : (
+          <div className="doctor-list flex overflow-x-auto space-x-4 scrollbar-hide">
+            {doctors.map((doctor) => (
+              <motion.div
+                key={doctor.id}
+                className="doctor-card flex-shrink-0 w-64 bg-white shadow-lg rounded-lg p-4 cursor-pointer"
+                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5 }}
+                onClick={() => handleDoctorClick(doctor)}
+              >
+                <img
+                  src={doctor.image}
+                  alt={doctor.name}
+                  className="w-full h-40 object-cover rounded-lg mb-4"
+                />
+                <h3 className="text-xl font-semibold text-center">{doctor.name}</h3>
+                <p className="text-center text-blue-500">{doctor.specialty}</p>
+                <p className="text-sm mt-2">
+                  <strong>Phone:</strong> {doctor.phoneNumber} <br />
+                  <strong>Email:</strong> {doctor.email}
+                </p>
+              </motion.div>
+            ))}
           </div>
         )}
       </div>
