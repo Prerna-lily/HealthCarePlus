@@ -13,6 +13,10 @@ To run the project directory use:
 
 **SQL Query for BookAppointment.jsx:**
 
+**In PostgreSQL:**
+
+CREATE DATABASE appointment_db;
+
 CREATE TABLE appointments1 (
   id SERIAL PRIMARY KEY,
   doctor VARCHAR(255) NOT NULL,
