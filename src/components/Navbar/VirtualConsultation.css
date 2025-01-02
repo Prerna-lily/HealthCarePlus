@@ -1,4 +1,99 @@
-body {
-    font-family: 'Arial', sans-serif; /* Replace with your preferred font */
-  }
-  
+.virtual-consultation-container {
+  font-family: "Roboto", sans-serif;
+  padding: 20px;
+  background-color: #f9fafb;
+  max-width: 800px;
+  margin: auto;
+}
+
+.back-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+.header-box,
+.doctor-box,
+.form-box {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.page-description {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.procedure-steps {
+  list-style-type: decimal;
+  padding-left: 20px;
+  color: #555;
+}
+
+.doctor-box h2,
+.form-box h2 {
+  font-size: 1.5rem;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.booking-form .form-input,
+.booking-form .form-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.booking-form .form-input:focus,
+.booking-form .form-textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.primary-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.primary-button:hover {
+  background-color: #0056b3;
+}
+
+.success-message {
+  color: #28a745;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: #dc3545;
+  margin-top: 10px;
+}
