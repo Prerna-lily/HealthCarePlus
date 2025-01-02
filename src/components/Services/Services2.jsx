@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useNavigate } from "react-router-dom";
 
 const healthServices = [
   {
@@ -33,10 +33,10 @@ const healthServices = [
 ];
 
 const Services2 = () => {
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const handleViewAllServices = () => {
-    navigate("/all-services"); // Navigate to the "All Services" page
+    navigate("/all-services"); 
   };
 
   return (
@@ -57,7 +57,6 @@ const Services2 = () => {
           </p>
         </div>
 
-        {/* Service Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {healthServices.map((service) => (
             <div
@@ -77,7 +76,6 @@ const Services2 = () => {
           ))}
         </div>
 
-        {/* "View All Services" Button */}
         <div data-aos="fade-up" data-aos-delay="900" className="text-center mt-8">
           <button className="primary-btn" onClick={handleViewAllServices}>
             View All Services
