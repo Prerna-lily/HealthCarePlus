@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import pkg from "pg";
+import nodemailer from "nodemailer";
 
 const { Pool } = pkg; // Import Pool from pg using destructuring
 
@@ -17,23 +18,51 @@ const pool = new Pool({
   user: "postgres", // Replace with your PostgreSQL username
   host: "localhost",
   database: "appointment_db", // Replace with your PostgreSQL database name
-  password: "password", // Replace with your PostgreSQL password
+  password: "prerna2004", // Replace with your PostgreSQL password
   port: 5432,
 });
 
-// API to handle appointment booking
+// Nodemailer Transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "whitecloud122004@gmail.com", // Replace with your email
+    pass: "gnch bvun oref eicb", // Replace with your app password
+  },
+});
+
+// Function to send email
+const sendEmail = async (to, doctor, date, time, reason) => {
+  try {
+    const info = await transporter.sendMail({
+      from: "whitecloud122004@gmail.com", // Replace with your email
+      to, // Patient's email
+      subject: "Appointment Confirmation",
+      html: `
+        <h3>Appointment Confirmation</h3>
+        <p>Your appointment has been confirmed with the following details:</p>
+        <ul>
+          <li><strong>Doctor:</strong> ${doctor}</li>
+          <li><strong>Date:</strong> ${date}</li>
+          <li><strong>Time:</strong> ${time}</li>
+          <li><strong>Reason:</strong> ${reason}</li>
+        </ul>
+      `,
+    });
+    console.log("Email sent: %s", info.messageId);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+};
+
+// API to book an appointment
 app.post("/book-appointment", async (req, res) => {
-  const {
-    doctor,
-    date,
-    time,
-    patientName,
-    patientEmail,
-    appointmentReason,
-    payment,
-  } = req.body;
+  const { doctor, date, time, patientName, patientEmail, appointmentReason, payment } = req.body;
+
+  console.log("Received appointment data:", req.body); // Log incoming request data
 
   try {
+    // Insert the appointment data into PostgreSQL
     const result = await pool.query(
       `INSERT INTO appointments1 
         (doctor, date, time, patient_name, patient_email, appointment_reason, payment) 
@@ -41,77 +70,18 @@ app.post("/book-appointment", async (req, res) => {
         RETURNING *`,
       [doctor, date, time, patientName, patientEmail, appointmentReason, payment]
     );
+
+    // Send confirmation email
+    await sendEmail(patientEmail, doctor, date, time, appointmentReason);
+
+    // Return success response
     res.status(201).json({
-      message: "Appointment booked successfully",
+      message: "Appointment booked successfully!",
       data: result.rows[0],
     });
   } catch (error) {
     console.error("Error booking appointment:", error);
     res.status(500).json({ message: "Error booking appointment", error: error.message });
-  }
-});
-
-// API to handle video consultation scheduling
-app.post("/schedule-video-consultation", async (req, res) => {
-  const { doctor, date, time, patientName, patientEmail, appointmentReason } = req.body;
-
-  try {
-    // Generate a unique video consultation link
-    const videoLink = `https://video-conferencing-service.com/${Date.now()}`;
-
-    // Insert the appointment data into PostgreSQL
-    const result = await pool.query(
-      `INSERT INTO appointments1 
-        (doctor, date, time, patient_name, patient_email, appointment_reason, payment) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7) 
-        RETURNING *`,
-      [doctor, date, time, patientName, patientEmail, appointmentReason, false] // assuming payment is false initially
-    );
-
-    // Send confirmation email
-    await sendEmail(patientEmail, doctor, date, time, appointmentReason);
-
-    // Return the new appointment data along with the video link
-    res.status(201).json({
-      message: "Video consultation scheduled successfully",
-      data: {
-        ...result.rows[0],
-        video_link: videoLink,
-      },
-    });
-  } catch (error) {
-    console.error("Error scheduling video consultation:", error);
-    res.status(500).json({ message: "Error scheduling video consultation", error: error.message });
-  }
-});
-
-// API to fetch doctor availability
-app.get("/doctor-availability", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT DISTINCT doctor FROM appointments1");
-    res.status(200).json({ availability: result.rows });
-  } catch (error) {
-    console.error("Error fetching doctor availability:", error);
-    res.status(500).json({ message: "Error fetching doctor availability", error: error.message });
-  }
-});
-
-// API to handle payments
-app.post("/process-payment", async (req, res) => {
-  const { amount, method } = req.body;
-
-  try {
-    // Simulate a payment process (replace with a real payment gateway integration, e.g., Stripe)
-    const transactionId = `TXN${Date.now()}`;
-    res.status(200).json({
-      message: "Payment processed successfully",
-      transactionId,
-      amount,
-      method,
-    });
-  } catch (error) {
-    console.error("Error processing payment:", error);
-    res.status(500).json({ message: "Error processing payment", error: error.message });
   }
 });
 
