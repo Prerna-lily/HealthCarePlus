@@ -59,10 +59,47 @@ const sendEmail = async (to, doctor, date, time, reason) => {
 app.post("/book-appointment", async (req, res) => {
   const { doctor, date, time, patientName, patientEmail, appointmentReason, payment } = req.body;
 
-  console.log("Received appointment data:", req.body); // Log incoming request data
+  // Validate input fields
+  if (!doctor || !date || !time || !patientName || !patientEmail || !appointmentReason || !payment) {
+    console.error("Validation Error: Missing required fields");
+    return res.status(400).json({ message: "All fields are required." });
+  }
 
   try {
+    // Map payment method to simplified value
+    const paymentStatus = ["Credit Card", "PayPal", "Debit Card", "UPI"].includes(payment) ? payment : "Other";
+
     // Insert the appointment data into PostgreSQL
+    const result = await pool.query(
+      `INSERT INTO appointments1 
+        (doctor, date, time, patient_name, patient_email, appointment_reason, payment) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) 
+        RETURNING *`,
+      [doctor, date, time, patientName, patientEmail, appointmentReason, paymentStatus]
+    );
+
+    // Send a confirmation email
+    await sendEmail(patientEmail, doctor, date, time, appointmentReason);
+
+    res.status(201).json({ message: "Appointment booked successfully.", appointment: result.rows[0] });
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+    res.status(500).json({ message: "Error booking appointment. Please try again." });
+  }
+});
+
+// API to schedule a video consultation
+app.post("/schedule-video-consultation", async (req, res) => {
+  const { doctor, date, time, patientName, patientEmail, appointmentReason, payment } = req.body;
+
+  // Validate input fields
+  if (!doctor || !date || !time || !patientName || !patientEmail || !appointmentReason || payment === undefined) {
+    console.error("Validation Error: Missing required fields", req.body);
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  try {
+    // Insert data into the correct PostgreSQL table (appointments1)
     const result = await pool.query(
       `INSERT INTO appointments1 
         (doctor, date, time, patient_name, patient_email, appointment_reason, payment) 
@@ -76,14 +113,15 @@ app.post("/book-appointment", async (req, res) => {
 
     // Return success response
     res.status(201).json({
-      message: "Appointment booked successfully!",
+      message: "Virtual consultation scheduled successfully!",
       data: result.rows[0],
     });
   } catch (error) {
-    console.error("Error booking appointment:", error);
-    res.status(500).json({ message: "Error booking appointment", error: error.message });
+    console.error("Error scheduling virtual consultation:", error.message || error);
+    res.status(500).json({ message: "Error scheduling virtual consultation", error: error.message });
   }
 });
+
 
 // Start the server
 app.listen(port, () => {
