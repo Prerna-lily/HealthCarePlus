@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 // Updated services data with more services and special offerings
 const servicesData = [
@@ -54,9 +55,33 @@ const servicesData = [
 ];
 
 const AllServices = () => {
+  const navigate = useNavigate(); // Initialize the navigate function
+
   return (
     <div className="bg-gray-100 dark:bg-black dark:text-white py-12">
       <div className="container">
+{/* Back Button */}
+<div className="container px-4 md:px-0 mb-6">
+        <button
+          onClick={() => navigate(-1)} // Navigate to the previous page
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-md flex items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L6.414 10H15a1 1 0 110 2H6.414l3.293 3.293a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Back
+        </button>
+      </div>
+
         <h1 className="text-3xl font-semibold text-center text-violet-950 dark:text-primary mb-8">
           All Health Services & Special Offers
         </h1>
