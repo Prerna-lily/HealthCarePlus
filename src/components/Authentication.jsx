@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios"; // For backend communication
 
 const Authentication = () => {
@@ -11,6 +12,8 @@ const Authentication = () => {
     phone: "",
   });
   const [errors, setErrors] = useState({});
+  
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const toggleAuthMode = () => setIsSignUp(!isSignUp);
 
@@ -68,6 +71,14 @@ const Authentication = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)} // Navigate to the previous page
+          className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4 hover:bg-blue-600"
+        >
+          Back
+        </button>
+
         <h2 className="text-xl font-semibold mb-4">{isSignUp ? "Sign Up" : "Log In"}</h2>
 
         <div className="mb-4">
@@ -115,7 +126,7 @@ const Authentication = () => {
             </label>
             <input
               type="email"
-              id="email"
+                id="email"
               name="email"
               className="w-full p-2 border border-gray-300 rounded-md"
               value={formData.email}
@@ -185,5 +196,3 @@ const Authentication = () => {
 };
 
 export default Authentication;
-
-
