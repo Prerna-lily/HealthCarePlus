@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Blog data
@@ -21,7 +21,7 @@ const BlogsData = [
   },
   {
     id: 2,
-    image: "https://www.health.harvard.edu/media/content/images/cr/bb5509e2-61d9-4346-b64f-8cb6ab5f3fa4.jpg",
+    image: "https://www.uhc.com/content/dam/uhcdotcom/foundation/blog/newsroom/Blood-Pressure-Numbers_Newsroom.jpg",
     title: "Understanding Your Blood Pressure",
     description:
       "Learn more about blood pressure, its importance, and what you can do to maintain a healthy range.",
@@ -59,33 +59,67 @@ const PartnersData = [
     id: 1,
     name: "Artemis Hospital",
     logo: "src/assets/brands/im7.png", // Replace with actual logo URL
-    website: "https://www.artemishospitals.com" // Artemis Hospital website
+    website: "https://www.artemishospitals.com", // Artemis Hospital website
+    address: "21, Greams Lane, Off Greams Road, Chennai - 600006, Tamil Nadu, India.",
+    contact: "+91-44-2829 0200",
+    email: "international@artemishospitals.com",
+    specialties: "Multi-speciality",
+    introduction:
+      "Artemis Hospital is a state-of-the-art medical facility located in Gurgaon, India. It is known for its advanced technology and expertise in various medical specialties.",
+    treatments: ["Cardiology", "Oncology", "Neurology", "Orthopaedics"],
   },
   {
     id: 2,
     name: "Apollo Hospital",
     logo: "src/assets/brands/im6.png", // Replace with actual logo URL
-    website: "https://www.apollohospitals.com" // Apollo Hospital website
+    website: "https://www.apollohospitals.com", // Apollo Hospital website
+    address: "21, Greams Lane, Off Greams Road, Chennai - 600006, Tamil Nadu, India.",
+    contact: "+91-44-2829 0200",
+    email: "international@apollohospitals.com",
+    specialties: "Multi-speciality",
+    introduction:
+      "Apollo Hospitals is a leading healthcare provider in India, offering advanced medical services and world-class treatment options.",
+    treatments: ["Cardiology", "Neurosurgery", "Gastroenterology", "Pediatrics"],
   },
   {
     id: 3,
-    name: "Hospital Aleman",
-    logo: "src/assets/brands/im8.png", // Replace with actual logo URL
-    website: "https://www.hospitalaleman.com.ar" // Hospital Aleman website
+    name: "Charité – Universitätsmedizin",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_Charite.svg/1920px-Logo_Charite.svg.png", // Replace with actual logo URL
+    website: "https://www.charite.de/en/", // Charité Hospital website
+    address: "Charitéplatz 1, 10117 Berlin, Germany",
+    contact: "+49 30 45050",
+    email: "info@charite.de",
+    specialties: "Multi-speciality",
+    introduction:
+      "Charité is one of Europe's largest university hospitals, offering top-quality medical care and advanced research in a wide variety of fields.",
+    treatments: ["Cardiology", "Neurology", "Oncology", "Endocrinology"],
   },
   {
     id: 4,
     name: "Hospital Metropolitano",
     logo: "src/assets/brands/im9.png", // Replace with actual logo URL
-    website: "https://www.hospitalmetropolitano.com" // Hospital Metropolitano website
+   // Hospital Metropolitano website
+    address: "Avenida La Paz, 121, Quito, Ecuador",
+    contact: "+593-2-394-1390",
+    email: "info@hospitalmetropolitano.com",
+    website: "https://www.hospitalmetropolitano.com",
+    specialties: "Multi-speciality",
+    introduction:
+      "Hospital Metropolitano is a leading hospital in Ecuador, known for its modern infrastructure and comprehensive healthcare services.",
+    treatments: ["General Medicine", "Pediatrics", "Orthopaedics", "Surgery"],
   },
 ];
 
 const BlogsComp = () => {
+  const [selectedPartner, setSelectedPartner] = useState(null);
   const navigate = useNavigate();
 
   const handleBlogClick = (blog) => {
     navigate("/blog-details", { state: { blog } });
+  };
+
+  const handlePartnerClick = (partner) => {
+    setSelectedPartner(partner);
   };
 
   const handleViewAllPosts = () => {
@@ -136,23 +170,44 @@ const BlogsComp = () => {
             <div
               key={partner.id}
               className="partner-card p-4 bg-white rounded-md shadow-md flex flex-col items-center justify-center"
+              onClick={() => handlePartnerClick(partner)}
             >
-              <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={partner.logo}
-                  alt={partner.name}
-                  className="h-20 object-contain"
-                />
-              </a>
-              <h2 className="text-lg font-semibold mt-4 text-center">
-                <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                  {partner.name}
-                </a>
-              </h2>
+              <img
+                src={partner.logo}
+                alt={partner.name}
+                className="h-20 object-contain"
+              />
+              <h2 className="text-lg font-semibold mt-4 text-center">{partner.name}</h2>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Partner Details Modal */}
+      {selectedPartner && (
+        <div className="partner-details-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md w-3/4 max-w-3xl">
+            <h2 className="text-2xl font-semibold mb-4">{selectedPartner.name}</h2>
+            <p><strong>Address:</strong> {selectedPartner.address}</p>
+            <p><strong>Contact:</strong> {selectedPartner.contact}</p>
+            <p><strong>Email:</strong> {selectedPartner.email}</p>
+            <p><strong>Specialties:</strong> {selectedPartner.specialties}</p>
+            <p><strong>Introduction:</strong> {selectedPartner.introduction}</p>
+            <h3 className="mt-4 font-semibold">Treatments Offered:</h3>
+            <ul>
+              {selectedPartner.treatments.map((treatment, index) => (
+                <li key={index}>{treatment}</li>
+              ))}
+            </ul>
+            <button
+              className="mt-6 primary-btn"
+              onClick={() => setSelectedPartner(null)} // Close the modal
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
