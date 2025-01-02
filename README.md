@@ -10,3 +10,16 @@ Currently, two official plugins are available:
 To run the project directory use:
 
 **npm run dev**
+
+**SQL Query for BookAppointment.jsx:**
+
+CREATE TABLE appointments1 (
+  id SERIAL PRIMARY KEY,
+  doctor VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  time TIME NOT NULL,
+  patient_name VARCHAR(255) NOT NULL,
+  patient_email VARCHAR(255) NOT NULL,
+  appointment_reason TEXT,
+  payment BOOLEAN DEFAULT FALSE
+);
