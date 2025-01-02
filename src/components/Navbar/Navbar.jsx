@@ -27,6 +27,11 @@ export const MenuLinks = [
     name: "Blog",
     link: "/blog",
   },
+  {
+    id: 5,
+    name: "Virtual Consultation",
+    link: "/virtual-consultation",
+  },
 ];
 
 const Navbar = () => {
@@ -61,6 +66,7 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
+
               {/* Book Appointment Button */}
               <Link to="/book-appointment" className="primary-btn">
                 Book Appointment
