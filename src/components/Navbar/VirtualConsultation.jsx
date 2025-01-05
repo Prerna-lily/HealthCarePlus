@@ -58,12 +58,12 @@ const VirtualConsultation = () => {
         formData
       );
       setSuccessMessage(
-        "Consultation booked successfully! A confirmation email has been sent."
+        `Consultation booked successfully with ${form.doctor}! A confirmation email has been sent to ${form.patientEmail}.`
       );
     } catch (error) {
       setError("Error booking consultation, please try again.");
     }
-  };
+  };  
   
 
   const handlePayment = (method) => {
