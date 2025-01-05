@@ -1,12 +1,43 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
+  const [showDirections, setShowDirections] = useState(false);
+  const [showAmbulanceDetails, setShowAmbulanceDetails] = useState(false);
+
+  // Coordinates for Munich Airport and Healthcare+ hospital
+  const munichAirportCoords = [48.3538, 11.7861];
+  const healthcareCoords = [48.1246, 11.6017];
+  const path = [munichAirportCoords, healthcareCoords];
+
+  // Reference to avoid re-initialization
+  const mapRef = useRef(null);
+
+  // Handle show/hide for directions modal
   const handleGetDirections = () => {
-    const mapsUrl =
-      "https://www.google.com/maps/dir/?api=1&destination=Ismaninger+Str.+22,+81675+München";
-    window.open(mapsUrl, "_blank");
+    setShowDirections(true);
   };
+
+  const closeDirectionsModal = () => {
+    setShowDirections(false);
+  };
+
+  // Handle show/hide for ambulance details modal
+  const handleAmbulanceDetails = () => {
+    setShowAmbulanceDetails(true);
+  };
+
+  const closeAmbulanceDetailsModal = () => {
+    setShowAmbulanceDetails(false);
+  };
+
+  useEffect(() => {
+    // Prevent re-initialization of the map
+    if (mapRef.current && mapRef.current._container) {
+      mapRef.current._container._leaflet_id = null;
+    }
+  }, []);
 
   return (
     <div className="bg-dark text-white">
@@ -39,6 +70,37 @@ const Footer = () => {
             >
               Get Directions
             </button>
+
+            {/* Directions Modal */}
+            {showDirections && (
+              <div className="modal-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-black text-white p-8 rounded shadow-lg max-w-lg w-full">
+                  <h2 className="text-2xl font-bold mb-4">Directions</h2>
+                  <MapContainer
+                    center={munichAirportCoords}
+                    zoom={13}
+                    style={{ height: "400px", width: "100%" }}
+                    scrollWheelZoom={false}
+                    ref={mapRef} // Using ref to avoid re-initialization
+                  >
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                    <Marker position={munichAirportCoords}>
+                      <Popup>Munich Airport</Popup>
+                    </Marker>
+                    <Marker position={healthcareCoords}>
+                      <Popup>Healthcare+ Hospital</Popup>
+                    </Marker>
+                    <Polyline positions={path} color="blue" />
+                  </MapContainer>
+                  <button
+                    className="mt-4 px-6 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition"
+                    onClick={closeDirectionsModal}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Trusted by Patients Section */}
@@ -59,21 +121,15 @@ const Footer = () => {
             </h1>
             <ul className="text-sm list-disc pl-4">
               <li>Best Cardiology And Cardiac Surgery Hospitals in Germany</li>
-              <li>
-                Best Cosmetic And Plastic Surgery Hospitals in Germany
-              </li>
+              <li>Best Cosmetic And Plastic Surgery Hospitals in Germany</li>
               <li>Best Dental Treatment Hospitals in Germany</li>
               <li>Best ENT Surgery Hospitals in Germany</li>
               <li>Best Gastroenterology Hospitals in Germany</li>
               <li>Best General Surgery Hospitals in Germany</li>
               <li>Best Hematology Hospitals in Germany</li>
               <li>Best Nephrology Hospitals in Germany</li>
-              <li>
-                Best Neurology And Neurosurgery Hospitals in Germany
-              </li>
-              <li>
-                Best Obesity Or Bariatric Surgery Hospitals in Germany
-              </li>
+              <li>Best Neurology And Neurosurgery Hospitals in Germany</li>
+              <li>Best Obesity Or Bariatric Surgery Hospitals in Germany</li>
             </ul>
           </div>
 
@@ -105,6 +161,37 @@ const Footer = () => {
             <FaLinkedin className="text-2xl hover:text-primary duration-300" />
           </a>
         </div>
+
+        {/* Ambulance Details Button */}
+        <div className="mt-6 text-center">
+          <button
+            className="primary-btn mt-6"
+            onClick={handleAmbulanceDetails}
+          >
+            Ambulance Details
+          </button>
+        </div>
+
+        {/* Ambulance Details Modal */}
+        {showAmbulanceDetails && (
+          <div className="modal-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-black text-white p-8 rounded shadow-lg max-w-lg w-full">
+              <h2 className="text-2xl font-bold mb-4">Ambulance Details</h2>
+              <p className="text-sm">
+                Our ambulance service is available 24/7 for emergency transport
+                to and from the hospital. Please call us at the following number
+                for assistance:
+              </p>
+              <p className="text-lg font-semibold mt-4">+49 170 1234567</p>
+              <button
+                className="mt-4 px-6 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition"
+                onClick={closeAmbulanceDetailsModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );
